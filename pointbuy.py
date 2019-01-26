@@ -91,9 +91,10 @@ def choose_scores(all_cost_spreads, num_choices=DEFAULT_NUM_CHOICES):
     is scrambled and randomly assigned to actual abilities.
     """
     num_choices = min(num_choices, len(all_cost_spreads))
-    
+
     arrays = [[STATS_BY_COST[cost] for cost in spread]
-              for spread in sorted(random.sample(all_cost_spreads, num_choices), reverse=True)]
+              for spread
+              in sorted(random.sample(all_cost_spreads, num_choices), reverse=True)]
 
     print('\nChoose an array:\n')
     for i, arr in enumerate(arrays):
@@ -114,7 +115,7 @@ def choose_scores(all_cost_spreads, num_choices=DEFAULT_NUM_CHOICES):
 
     array = arrays[selection]
     random.shuffle(array)
-    
+
     print('\nAbility Scores:\n')
     for i, stat in enumerate(ABILITIES):
         print('  %3s  %2d' % (stat, array[i]))
@@ -141,9 +142,9 @@ if __name__ == '__main__':
                         help='list all valid point-buy arrays')
     args = parser.parse_args()
 
-
     if sum([args.choices is not None, args.generate is not None, args.list]) > 1:
-        parser.error('incompatible arguments: only one of -c, -g, and -l accepted at a time')
+        parser.error('incompatible arguments:'
+                     'only one of -c, -g, and -l accepted at a time')
     if args.points < 0:
         parser.error('invalid point pool size (must be nonnegative)')
 
