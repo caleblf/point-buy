@@ -5817,10 +5817,6 @@ var author$project$Stats$modifierString = function (mod) {
 	return ((mod > 0) ? elm$core$String$cons('+') : elm$core$Basics$identity)(
 		elm$core$String$fromInt(mod));
 };
-var elm$core$Basics$always = F2(
-	function (a, _n0) {
-		return a;
-	});
 var elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (!maybe.$) {
@@ -5914,9 +5910,8 @@ var author$project$Main$statTableRow = F7(
 								[
 									elm$html$Html$Attributes$type_('radio'),
 									elm$html$Html$Attributes$name('swap-first'),
-									elm$html$Html$Events$onInput(
-									elm$core$Basics$always(
-										author$project$Main$ChangeFirstSwapSelectionTo(ability))),
+									elm$html$Html$Events$onClick(
+									author$project$Main$ChangeFirstSwapSelectionTo(ability)),
 									elm$html$Html$Attributes$checked(
 									A2(author$project$Stats$abilitiesEqual, ability, firstSwappedAbility))
 								]),
@@ -5927,9 +5922,8 @@ var author$project$Main$statTableRow = F7(
 								[
 									elm$html$Html$Attributes$type_('radio'),
 									elm$html$Html$Attributes$name('swap-second'),
-									elm$html$Html$Events$onInput(
-									elm$core$Basics$always(
-										author$project$Main$ChangeSecondSwapSelectionTo(ability))),
+									elm$html$Html$Events$onClick(
+									author$project$Main$ChangeSecondSwapSelectionTo(ability)),
 									elm$html$Html$Attributes$checked(
 									A2(author$project$Stats$abilitiesEqual, ability, secondSwappedAbility))
 								]),

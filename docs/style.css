@@ -32,13 +32,24 @@ body {
     text-align: center;
 }
 
-table.stat-report {
-    margin: 0.8em;
-    border-collapse: collapse;
+button {
+    border: none;
+    background-color: #eee;
+    color: black;
+    padding: 0.8em;
+    cursor: pointer;
+}
+button:hover {
+    background-color: turquoise;
 }
 
 input[type=number] {
     width: 3em;
+}
+
+table.stat-report {
+    margin: 0.8em;
+    border-collapse: collapse;
 }
 
 td, th {

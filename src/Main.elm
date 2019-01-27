@@ -163,14 +163,14 @@ statTableRow firstSwappedAbility secondSwappedAbility ability label rawScore rac
       , [ Html.input
             [ Attr.type_ "radio"
             , Attr.name "swap-first"
-            , Html.Events.onInput <| always <| ChangeFirstSwapSelectionTo ability
+            , Html.Events.onClick <| ChangeFirstSwapSelectionTo ability
             , Attr.checked <| Stats.abilitiesEqual ability firstSwappedAbility
             ]
             []
         , Html.input
             [ Attr.type_ "radio"
             , Attr.name "swap-second"
-            , Html.Events.onInput <| always <| ChangeSecondSwapSelectionTo ability
+            , Html.Events.onClick <| ChangeSecondSwapSelectionTo ability
             , Attr.checked <| Stats.abilitiesEqual ability secondSwappedAbility
             ]
             []
