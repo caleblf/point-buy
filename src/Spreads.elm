@@ -4,8 +4,6 @@ import Random
 import Random.List
 
 
--- Generate all stat arrays
-
 type alias CostSpread = List Int
 type alias PointSpread = List Int
 
@@ -13,14 +11,8 @@ type alias PointSpread = List Int
 defaultTotalPoints = 27
 
 
---allPointSpreads : List PointSpread
---allPointSpreads =
---  List.map
---    identity
---    <| spreadsOfLengthCosting 1 2 9
-
-allPointSpreads : List PointSpread
-allPointSpreads =
+optimalPointSpreads : List PointSpread
+optimalPointSpreads =
   List.map
     (List.map spend)
     <| spreadsOfLengthCosting 6 defaultTotalPoints (List.foldr max 0 validCosts)
@@ -56,13 +48,12 @@ spend points =
 spreadsOfLengthCosting : Int -> Int -> Int -> List CostSpread
 spreadsOfLengthCosting length totalPoints maxCost =
   case (length, totalPoints) of
-    (0, _) -> [[]]
     (_, 0) -> [List.repeat length 0]
-    (_, _) ->
+    (0, _) -> []
+    _ ->
       List.concatMap
         (\cost ->
-          if cost > min totalPoints maxCost then []
-          else if totalPoints > length * maxCost then []
+          if cost > totalPoints || cost > maxCost || totalPoints > length * maxCost then []
           else
             List.map ((::) cost)
               <| spreadsOfLengthCosting (length - 1) (totalPoints - cost) cost)
@@ -71,9 +62,12 @@ spreadsOfLengthCosting length totalPoints maxCost =
 
 randomSpreads : Int -> Random.Generator (List PointSpread)
 randomSpreads n =
-  Random.map (List.take n >> List.sortBy spreadSortKey) <| Random.List.shuffle allPointSpreads
+  Random.map
+    (List.take n >> List.sortBy spreadSortKey)
+    <| Random.List.shuffle optimalPointSpreads
 
 
 spreadSortKey : PointSpread -> String
 spreadSortKey =
   List.map ((-) 20 >> String.fromInt >> String.padLeft 2 '0') >> String.concat
+

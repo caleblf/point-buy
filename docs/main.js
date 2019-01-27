@@ -519,11 +519,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.K.z === region.S.z)
+	if (region.Q.F === region.V.F)
 	{
-		return 'on line ' + region.K.z;
+		return 'on line ' + region.Q.F;
 	}
-	return 'on lines ' + region.K.z + ' through ' + region.S.z;
+	return 'on lines ' + region.Q.F + ' through ' + region.V.F;
 }
 
 
@@ -2742,9 +2742,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		k: func(record.k),
-		L: record.L,
-		J: record.J
+		q: func(record.q),
+		R: record.R,
+		P: record.P
 	}
 });
 
@@ -3012,11 +3012,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.k;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.L;
+		var message = !tag ? value : tag < 3 ? value.a : value.q;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.R;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.J) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.P) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -4006,7 +4006,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		impl.aF,
 		impl.aD,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.A && impl.A(sendToApp)
+			var divertHrefToApp = impl.G && impl.G(sendToApp)
 			var view = impl.aH;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
@@ -4081,7 +4081,7 @@ function _Browser_application(impl)
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		A: function(sendToApp)
+		G: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4097,9 +4097,9 @@ function _Browser_application(impl)
 					var next = elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ae === next.ae
-							&& curr.V === next.V
-							&& curr.ab.a === next.ab.a
+							&& curr.ag === next.ag
+							&& curr.Y === next.Y
+							&& curr.ad.a === next.ad.a
 						)
 							? elm$browser$Browser$Internal(next)
 							: elm$browser$Browser$External(href)
@@ -4270,12 +4270,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		ai: _Browser_getScene(),
-		am: {
-			F: _Browser_window.pageXOffset,
-			G: _Browser_window.pageYOffset,
-			x: _Browser_doc.documentElement.clientWidth,
-			s: _Browser_doc.documentElement.clientHeight
+		ak: _Browser_getScene(),
+		an: {
+			L: _Browser_window.pageXOffset,
+			M: _Browser_window.pageYOffset,
+			D: _Browser_doc.documentElement.clientWidth,
+			y: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4285,8 +4285,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		x: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		s: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		D: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		y: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4309,15 +4309,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			ai: {
-				x: node.scrollWidth,
-				s: node.scrollHeight
+			ak: {
+				D: node.scrollWidth,
+				y: node.scrollHeight
 			},
-			am: {
-				F: node.scrollLeft,
-				G: node.scrollTop,
-				x: node.clientWidth,
-				s: node.clientHeight
+			an: {
+				L: node.scrollLeft,
+				M: node.scrollTop,
+				D: node.clientWidth,
+				y: node.clientHeight
 			}
 		};
 	});
@@ -4347,18 +4347,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			ai: _Browser_getScene(),
-			am: {
-				F: x,
-				G: y,
-				x: _Browser_doc.documentElement.clientWidth,
-				s: _Browser_doc.documentElement.clientHeight
+			ak: _Browser_getScene(),
+			an: {
+				L: x,
+				M: y,
+				D: _Browser_doc.documentElement.clientWidth,
+				y: _Browser_doc.documentElement.clientHeight
 			},
 			as: {
-				F: x + rect.left,
-				G: y + rect.top,
-				x: rect.width,
-				s: rect.height
+				L: x + rect.left,
+				M: y + rect.top,
+				D: rect.width,
+				y: rect.height
 			}
 		};
 	});
@@ -4512,12 +4512,8 @@ var elm$core$Basics$apL = F2(
 		return f(x);
 	});
 var elm$core$Basics$gt = _Utils_gt;
-var elm$core$Basics$lt = _Utils_lt;
-var elm$core$Basics$min = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) < 0) ? x : y;
-	});
 var elm$core$Basics$mul = _Basics_mul;
+var elm$core$Basics$or = _Basics_or;
 var elm$core$Basics$sub = _Basics_sub;
 var elm$core$Basics$add = _Basics_add;
 var elm$core$List$foldl = F3(
@@ -4652,25 +4648,22 @@ var elm$core$List$repeat = F2(
 var author$project$Spreads$spreadsOfLengthCosting = F3(
 	function (length, totalPoints, maxCost) {
 		var _n0 = _Utils_Tuple2(length, totalPoints);
-		if (!_n0.a) {
+		if (!_n0.b) {
 			return _List_fromArray(
-				[_List_Nil]);
+				[
+					A2(elm$core$List$repeat, length, 0)
+				]);
 		} else {
-			if (!_n0.b) {
-				return _List_fromArray(
-					[
-						A2(elm$core$List$repeat, length, 0)
-					]);
+			if (!_n0.a) {
+				return _List_Nil;
 			} else {
 				return A2(
 					elm$core$List$concatMap,
 					function (cost) {
-						return (_Utils_cmp(
-							cost,
-							A2(elm$core$Basics$min, totalPoints, maxCost)) > 0) ? _List_Nil : ((_Utils_cmp(totalPoints, length * maxCost) > 0) ? _List_Nil : A2(
+						return ((_Utils_cmp(cost, totalPoints) > 0) || ((_Utils_cmp(cost, maxCost) > 0) || (_Utils_cmp(totalPoints, length * maxCost) > 0))) ? _List_Nil : A2(
 							elm$core$List$map,
 							elm$core$List$cons(cost),
-							A3(author$project$Spreads$spreadsOfLengthCosting, length - 1, totalPoints - cost, cost)));
+							A3(author$project$Spreads$spreadsOfLengthCosting, length - 1, totalPoints - cost, cost));
 					},
 					author$project$Spreads$validCosts);
 			}
@@ -4680,7 +4673,7 @@ var elm$core$Basics$max = F2(
 	function (x, y) {
 		return (_Utils_cmp(x, y) > 0) ? x : y;
 	});
-var author$project$Spreads$allPointSpreads = A2(
+var author$project$Spreads$optimalPointSpreads = A2(
 	elm$core$List$map,
 	elm$core$List$map(author$project$Spreads$spend),
 	A3(
@@ -4957,6 +4950,7 @@ var elm$core$List$length = function (xs) {
 		0,
 		xs);
 };
+var elm$core$Basics$lt = _Utils_lt;
 var elm$core$Basics$remainderBy = _Basics_remainderBy;
 var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
 var elm$random$Random$Seed = F2(
@@ -5084,7 +5078,7 @@ var author$project$Spreads$randomSpreads = function (n) {
 			elm$core$Basics$composeR,
 			elm$core$List$take(n),
 			elm$core$List$sortBy(author$project$Spreads$spreadSortKey)),
-		elm_community$random_extra$Random$List$shuffle(author$project$Spreads$allPointSpreads));
+		elm_community$random_extra$Random$List$shuffle(author$project$Spreads$optimalPointSpreads));
 };
 var elm$random$Random$Generate = elm$core$Basics$identity;
 var elm$core$Task$andThen = _Scheduler_andThen;
@@ -5278,7 +5272,6 @@ var elm$json$Json$Decode$OneOf = function (a) {
 	return {$: 2, a: a};
 };
 var elm$core$Basics$and = _Basics_and;
-var elm$core$Basics$or = _Basics_or;
 var elm$core$Char$toCode = _Char_toCode;
 var elm$core$Char$isLower = function (_char) {
 	var code = elm$core$Char$toCode(_char);
@@ -5501,63 +5494,162 @@ var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var author$project$Main$subscriptions = function (model) {
 	return elm$core$Platform$Sub$none;
 };
-var author$project$Main$DisplayStats = function (a) {
-	return {$: 0, a: a};
-};
+var author$project$Main$DisplayStats = F4(
+	function (a, b, c, d) {
+		return {$: 0, a: a, b: b, c: c, d: d};
+	});
 var author$project$Main$Scrambled = function (a) {
 	return {$: 1, a: a};
 };
 var author$project$Stats$StatArray = F6(
 	function (str, dex, con, _int, wis, cha) {
-		return {N: cha, P: con, R: dex, W: _int, aj: str, an: wis};
+		return {h: cha, i: con, j: dex, k: _int, m: str, o: wis};
 	});
+var author$project$Stats$Str = 0;
+var author$project$Stats$ModifierArray = F6(
+	function (str, dex, con, _int, wis, cha) {
+		return {h: cha, i: con, j: dex, k: _int, m: str, o: wis};
+	});
+var author$project$Stats$rawModifiers = A6(author$project$Stats$ModifierArray, 0, 0, 0, 0, 0, 0);
+var author$project$Stats$changeChaTo = F2(
+	function (score, arr) {
+		return _Utils_update(
+			arr,
+			{h: score});
+	});
+var author$project$Stats$changeConTo = F2(
+	function (score, arr) {
+		return _Utils_update(
+			arr,
+			{i: score});
+	});
+var author$project$Stats$changeDexTo = F2(
+	function (score, arr) {
+		return _Utils_update(
+			arr,
+			{j: score});
+	});
+var author$project$Stats$changeIntTo = F2(
+	function (score, arr) {
+		return _Utils_update(
+			arr,
+			{k: score});
+	});
+var author$project$Stats$changeStrTo = F2(
+	function (score, arr) {
+		return _Utils_update(
+			arr,
+			{m: score});
+	});
+var author$project$Stats$changeWisTo = F2(
+	function (score, arr) {
+		return _Utils_update(
+			arr,
+			{o: score});
+	});
+var author$project$Stats$setterFor = function (ability) {
+	switch (ability) {
+		case 0:
+			return author$project$Stats$changeStrTo;
+		case 1:
+			return author$project$Stats$changeDexTo;
+		case 2:
+			return author$project$Stats$changeConTo;
+		case 3:
+			return author$project$Stats$changeIntTo;
+		case 4:
+			return author$project$Stats$changeWisTo;
+		default:
+			return author$project$Stats$changeChaTo;
+	}
+};
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$Main$update = F2(
 	function (msg, model) {
-		switch (msg.$) {
-			case 3:
-				return _Utils_Tuple2(
-					model,
-					A2(
-						elm$random$Random$generate,
-						author$project$Main$ChosenOptions,
-						author$project$Spreads$randomSpreads(3)));
-			case 0:
-				var spreads = msg.a;
-				return _Utils_Tuple2(
-					author$project$Main$PickSpread(spreads),
-					elm$core$Platform$Cmd$none);
-			case 2:
-				var spread = msg.a;
-				return _Utils_Tuple2(
-					model,
-					A2(
-						elm$random$Random$generate,
-						author$project$Main$Scrambled,
-						elm_community$random_extra$Random$List$shuffle(spread)));
-			default:
-				if ((((((msg.a.b && msg.a.b.b) && msg.a.b.b.b) && msg.a.b.b.b.b) && msg.a.b.b.b.b.b) && msg.a.b.b.b.b.b.b) && (!msg.a.b.b.b.b.b.b.b)) {
-					var _n1 = msg.a;
-					var str = _n1.a;
-					var _n2 = _n1.b;
-					var dex = _n2.a;
-					var _n3 = _n2.b;
-					var con = _n3.a;
-					var _n4 = _n3.b;
-					var _int = _n4.a;
-					var _n5 = _n4.b;
-					var wis = _n5.a;
-					var _n6 = _n5.b;
-					var cha = _n6.a;
+		_n0$4:
+		while (true) {
+			switch (msg.$) {
+				case 3:
 					return _Utils_Tuple2(
-						author$project$Main$DisplayStats(
-							A6(author$project$Stats$StatArray, str, dex, con, _int, wis, cha)),
+						model,
+						A2(
+							elm$random$Random$generate,
+							author$project$Main$ChosenOptions,
+							author$project$Spreads$randomSpreads(3)));
+				case 0:
+					var spreads = msg.a;
+					return _Utils_Tuple2(
+						author$project$Main$PickSpread(spreads),
 						elm$core$Platform$Cmd$none);
-				} else {
-					return _Utils_Tuple2(model, elm$core$Platform$Cmd$none);
-				}
+				case 2:
+					var spread = msg.a;
+					return _Utils_Tuple2(
+						model,
+						A2(
+							elm$random$Random$generate,
+							author$project$Main$Scrambled,
+							elm_community$random_extra$Random$List$shuffle(spread)));
+				case 1:
+					if ((((((msg.a.b && msg.a.b.b) && msg.a.b.b.b) && msg.a.b.b.b.b) && msg.a.b.b.b.b.b) && msg.a.b.b.b.b.b.b) && (!msg.a.b.b.b.b.b.b.b)) {
+						var _n1 = msg.a;
+						var str = _n1.a;
+						var _n2 = _n1.b;
+						var dex = _n2.a;
+						var _n3 = _n2.b;
+						var con = _n3.a;
+						var _n4 = _n3.b;
+						var _int = _n4.a;
+						var _n5 = _n4.b;
+						var wis = _n5.a;
+						var _n6 = _n5.b;
+						var cha = _n6.a;
+						return _Utils_Tuple2(
+							A4(
+								author$project$Main$DisplayStats,
+								A6(author$project$Stats$StatArray, str, dex, con, _int, wis, cha),
+								0,
+								0,
+								author$project$Stats$rawModifiers),
+							elm$core$Platform$Cmd$none);
+					} else {
+						break _n0$4;
+					}
+				default:
+					break _n0$4;
+			}
 		}
+		return _Utils_Tuple2(
+			function () {
+				if (!model.$) {
+					var arr = model.a;
+					var firstSwappedAbility = model.b;
+					var secondSwappedAbility = model.c;
+					var modifiers = model.d;
+					switch (msg.$) {
+						case 4:
+							var newFirstSwapSelection = msg.a;
+							return A4(author$project$Main$DisplayStats, arr, newFirstSwapSelection, secondSwappedAbility, modifiers);
+						case 5:
+							var newSecondSwapSelection = msg.a;
+							return A4(author$project$Main$DisplayStats, arr, firstSwappedAbility, newSecondSwapSelection, modifiers);
+						case 6:
+							var ability = msg.a;
+							var newModifier = msg.b;
+							return A4(
+								author$project$Main$DisplayStats,
+								arr,
+								firstSwappedAbility,
+								secondSwappedAbility,
+								A3(author$project$Stats$setterFor, ability, newModifier, modifiers));
+						default:
+							return model;
+					}
+				} else {
+					return model;
+				}
+			}(),
+			elm$core$Platform$Cmd$none);
 	});
 var author$project$Main$Restart = {$: 3};
 var author$project$Main$Choose = function (a) {
@@ -5633,68 +5725,411 @@ var author$project$Main$spreadOption = function (spread) {
 			},
 			spread));
 };
-var author$project$Stats$report = function (_n0) {
-	var str = _n0.aj;
-	var dex = _n0.R;
-	var con = _n0.P;
-	var _int = _n0.W;
-	var wis = _n0.an;
-	var cha = _n0.N;
-	return _List_fromArray(
-		[
-			_Utils_Tuple2('STR', str),
-			_Utils_Tuple2('DEX', dex),
-			_Utils_Tuple2('CON', con),
-			_Utils_Tuple2('INT', _int),
-			_Utils_Tuple2('WIS', wis),
-			_Utils_Tuple2('CHA', cha)
-		]);
-};
-var author$project$Main$viewStatArray = function (arr) {
+var author$project$Main$columnLabel = function (label) {
 	return A2(
 		elm$html$Html$div,
 		_List_fromArray(
 			[
-				elm$html$Html$Attributes$class('stat-report')
+				elm$html$Html$Attributes$class('column-label')
 			]),
-		A2(
-			elm$core$List$map,
-			function (_n0) {
-				var stat = _n0.a;
-				var score = _n0.b;
-				return A2(
-					elm$html$Html$div,
-					_List_fromArray(
-						[
-							elm$html$Html$Attributes$class('labeled-score')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							elm$html$Html$div,
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$class('stat-label')
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text(stat)
-								])),
-							A2(
-							elm$html$Html$div,
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$class('score')
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text(
-									elm$core$String$fromInt(score))
-								]))
-						]));
-			},
-			author$project$Stats$report(arr)));
+		_List_fromArray(
+			[
+				elm$html$Html$text(label)
+			]));
 };
+var author$project$Main$ChangeFirstSwapSelectionTo = function (a) {
+	return {$: 4, a: a};
+};
+var author$project$Main$ChangeModifier = F2(
+	function (a, b) {
+		return {$: 6, a: a, b: b};
+	});
+var author$project$Main$ChangeSecondSwapSelectionTo = function (a) {
+	return {$: 5, a: a};
+};
+var author$project$Main$columnClasses = A2(
+	elm$core$List$map,
+	elm$html$Html$Attributes$class,
+	_List_fromArray(
+		['ability-col', 'score-col', 'swap-col', 'manual-mod-col', 'ability-col', 'score-col', 'score-col']));
+var author$project$Stats$abilitiesEqual = F2(
+	function (ability1, ability2) {
+		var _n0 = _Utils_Tuple2(ability1, ability2);
+		_n0$6:
+		while (true) {
+			switch (_n0.a) {
+				case 0:
+					if (!_n0.b) {
+						var _n1 = _n0.a;
+						var _n2 = _n0.b;
+						return true;
+					} else {
+						break _n0$6;
+					}
+				case 1:
+					if (_n0.b === 1) {
+						var _n3 = _n0.a;
+						var _n4 = _n0.b;
+						return true;
+					} else {
+						break _n0$6;
+					}
+				case 2:
+					if (_n0.b === 2) {
+						var _n5 = _n0.a;
+						var _n6 = _n0.b;
+						return true;
+					} else {
+						break _n0$6;
+					}
+				case 3:
+					if (_n0.b === 3) {
+						var _n7 = _n0.a;
+						var _n8 = _n0.b;
+						return true;
+					} else {
+						break _n0$6;
+					}
+				case 4:
+					if (_n0.b === 4) {
+						var _n9 = _n0.a;
+						var _n10 = _n0.b;
+						return true;
+					} else {
+						break _n0$6;
+					}
+				default:
+					if (_n0.b === 5) {
+						var _n11 = _n0.a;
+						var _n12 = _n0.b;
+						return true;
+					} else {
+						break _n0$6;
+					}
+			}
+		}
+		return false;
+	});
+var author$project$Stats$modifier = function (score) {
+	return ((score / 2) | 0) - 5;
+};
+var author$project$Stats$modifierString = function (mod) {
+	return ((mod > 0) ? elm$core$String$cons('+') : elm$core$Basics$identity)(
+		elm$core$String$fromInt(mod));
+};
+var elm$core$Basics$always = F2(
+	function (a, _n0) {
+		return a;
+	});
+var elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (!maybe.$) {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
+var elm$core$String$toInt = _String_toInt;
+var elm$html$Html$input = _VirtualDom_node('input');
+var elm$html$Html$td = _VirtualDom_node('td');
+var elm$html$Html$tr = _VirtualDom_node('tr');
+var elm$json$Json$Encode$bool = _Json_wrap;
+var elm$html$Html$Attributes$boolProperty = F2(
+	function (key, bool) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$bool(bool));
+	});
+var elm$html$Html$Attributes$checked = elm$html$Html$Attributes$boolProperty('checked');
+var elm$html$Html$Attributes$max = elm$html$Html$Attributes$stringProperty('max');
+var elm$html$Html$Attributes$min = elm$html$Html$Attributes$stringProperty('min');
+var elm$html$Html$Attributes$name = elm$html$Html$Attributes$stringProperty('name');
+var elm$html$Html$Attributes$placeholder = elm$html$Html$Attributes$stringProperty('placeholder');
+var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
+var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
+var elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 1, a: a};
+};
+var elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var elm$json$Json$Decode$field = _Json_decodeField;
+var elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3(elm$core$List$foldr, elm$json$Json$Decode$field, decoder, fields);
+	});
+var elm$json$Json$Decode$string = _Json_decodeString;
+var elm$html$Html$Events$targetValue = A2(
+	elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	elm$json$Json$Decode$string);
+var elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			elm$json$Json$Decode$map,
+			elm$html$Html$Events$alwaysStop,
+			A2(elm$json$Json$Decode$map, tagger, elm$html$Html$Events$targetValue)));
+};
+var author$project$Main$statTableRow = F7(
+	function (firstSwappedAbility, secondSwappedAbility, ability, label, rawScore, racialModifier, finalScore) {
+		return A2(
+			elm$html$Html$tr,
+			_List_Nil,
+			A3(
+				elm$core$List$map2,
+				function (_class) {
+					return elm$html$Html$td(
+						_List_fromArray(
+							[_class]));
+				},
+				author$project$Main$columnClasses,
+				_List_fromArray(
+					[
+						_List_fromArray(
+						[
+							elm$html$Html$text(label)
+						]),
+						_List_fromArray(
+						[
+							elm$html$Html$text(
+							elm$core$String$fromInt(rawScore))
+						]),
+						_List_fromArray(
+						[
+							A2(
+							elm$html$Html$input,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$type_('radio'),
+									elm$html$Html$Attributes$name('swap-first'),
+									elm$html$Html$Events$onInput(
+									elm$core$Basics$always(
+										author$project$Main$ChangeFirstSwapSelectionTo(ability))),
+									elm$html$Html$Attributes$checked(
+									A2(author$project$Stats$abilitiesEqual, ability, firstSwappedAbility))
+								]),
+							_List_Nil),
+							A2(
+							elm$html$Html$input,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$type_('radio'),
+									elm$html$Html$Attributes$name('swap-second'),
+									elm$html$Html$Events$onInput(
+									elm$core$Basics$always(
+										author$project$Main$ChangeSecondSwapSelectionTo(ability))),
+									elm$html$Html$Attributes$checked(
+									A2(author$project$Stats$abilitiesEqual, ability, secondSwappedAbility))
+								]),
+							_List_Nil)
+						]),
+						_List_fromArray(
+						[
+							elm$html$Html$text('+'),
+							A2(
+							elm$html$Html$input,
+							((racialModifier > 0) ? elm$core$List$cons(
+								elm$html$Html$Attributes$value(
+									elm$core$String$fromInt(racialModifier))) : elm$core$Basics$identity)(
+								_List_fromArray(
+									[
+										elm$html$Html$Attributes$type_('number'),
+										elm$html$Html$Attributes$min('0'),
+										elm$html$Html$Attributes$max('2'),
+										elm$html$Html$Events$onInput(
+										A2(
+											elm$core$Basics$composeR,
+											elm$core$String$toInt,
+											A2(
+												elm$core$Basics$composeR,
+												elm$core$Maybe$withDefault(0),
+												author$project$Main$ChangeModifier(ability)))),
+										elm$html$Html$Attributes$placeholder('0')
+									])),
+							_List_Nil)
+						]),
+						_List_fromArray(
+						[
+							elm$html$Html$text(label)
+						]),
+						_List_fromArray(
+						[
+							elm$html$Html$text(
+							elm$core$String$fromInt(finalScore))
+						]),
+						_List_fromArray(
+						[
+							elm$html$Html$text(
+							'(' + (author$project$Stats$modifierString(
+								author$project$Stats$modifier(finalScore)) + ')'))
+						])
+					])));
+	});
+var author$project$Stats$Cha = 5;
+var author$project$Stats$Con = 2;
+var author$project$Stats$Dex = 1;
+var author$project$Stats$Int_ = 3;
+var author$project$Stats$Wis = 4;
+var author$project$Stats$abilities = _List_fromArray(
+	[0, 1, 2, 3, 4, 5]);
+var author$project$Stats$applyModifiers = F2(
+	function (arr1, arr2) {
+		return A6(author$project$Stats$StatArray, arr1.m + arr2.m, arr1.j + arr2.j, arr1.i + arr2.i, arr1.k + arr2.k, arr1.o + arr2.o, arr1.h + arr2.h);
+	});
+var author$project$Stats$labels = _List_fromArray(
+	['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
+var author$project$Stats$getterFor = function (ability) {
+	switch (ability) {
+		case 0:
+			return function ($) {
+				return $.m;
+			};
+		case 1:
+			return function ($) {
+				return $.j;
+			};
+		case 2:
+			return function ($) {
+				return $.i;
+			};
+		case 3:
+			return function ($) {
+				return $.k;
+			};
+		case 4:
+			return function ($) {
+				return $.o;
+			};
+		default:
+			return function ($) {
+				return $.h;
+			};
+	}
+};
+var author$project$Stats$swapStatsIn = F3(
+	function (ability1, ability2, arr) {
+		return A3(
+			author$project$Stats$setterFor,
+			ability1,
+			A2(author$project$Stats$getterFor, ability2, arr),
+			A3(
+				author$project$Stats$setterFor,
+				ability2,
+				A2(author$project$Stats$getterFor, ability1, arr),
+				arr));
+	});
+var author$project$Stats$toList = function (_n0) {
+	var str = _n0.m;
+	var dex = _n0.j;
+	var con = _n0.i;
+	var _int = _n0.k;
+	var wis = _n0.o;
+	var cha = _n0.h;
+	return _List_fromArray(
+		[str, dex, con, _int, wis, cha]);
+};
+var elm$core$List$map5 = _List_map5;
+var elm$html$Html$table = _VirtualDom_node('table');
+var elm$html$Html$tbody = _VirtualDom_node('tbody');
+var elm$html$Html$th = _VirtualDom_node('th');
+var elm$html$Html$thead = _VirtualDom_node('thead');
+var elm$html$Html$Attributes$colspan = function (n) {
+	return A2(
+		_VirtualDom_attribute,
+		'colspan',
+		elm$core$String$fromInt(n));
+};
+var author$project$Main$viewStatTable = F4(
+	function (arr, firstSwappedAbility, secondSwappedAbility, modifiers) {
+		return A2(
+			elm$html$Html$table,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('stat-report')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$thead,
+					_List_Nil,
+					_List_fromArray(
+						[
+							A2(
+							elm$html$Html$tr,
+							_List_Nil,
+							_List_fromArray(
+								[
+									A2(
+									elm$html$Html$th,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$colspan(2)
+										]),
+									_List_fromArray(
+										[
+											author$project$Main$columnLabel('Raw Scores')
+										])),
+									A2(
+									elm$html$Html$th,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$class('swap-col')
+										]),
+									_List_fromArray(
+										[
+											author$project$Main$columnLabel('Swap Two')
+										])),
+									A2(
+									elm$html$Html$th,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$class('manual-mod-col')
+										]),
+									_List_fromArray(
+										[
+											author$project$Main$columnLabel('Racial Modifiers')
+										])),
+									A2(
+									elm$html$Html$th,
+									_List_fromArray(
+										[
+											elm$html$Html$Attributes$colspan(3)
+										]),
+									_List_fromArray(
+										[
+											author$project$Main$columnLabel('Final Scores')
+										]))
+								]))
+						])),
+					A2(
+					elm$html$Html$tbody,
+					_List_Nil,
+					A6(
+						elm$core$List$map5,
+						A2(author$project$Main$statTableRow, firstSwappedAbility, secondSwappedAbility),
+						author$project$Stats$abilities,
+						author$project$Stats$labels,
+						author$project$Stats$toList(arr),
+						author$project$Stats$toList(modifiers),
+						author$project$Stats$toList(
+							A2(
+								author$project$Stats$applyModifiers,
+								A3(author$project$Stats$swapStatsIn, firstSwappedAbility, secondSwappedAbility, arr),
+								modifiers))))
+				]));
+	});
 var elm$html$Html$button = _VirtualDom_node('button');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
 var author$project$Main$view = function (model) {
@@ -5719,6 +6154,9 @@ var author$project$Main$view = function (model) {
 				]));
 	} else {
 		var arr = model.a;
+		var firstSwappedAbility = model.b;
+		var secondSwappedAbility = model.c;
+		var modifiers = model.d;
 		return A2(
 			elm$html$Html$div,
 			_List_Nil,
@@ -5729,9 +6167,9 @@ var author$project$Main$view = function (model) {
 					_List_Nil,
 					_List_fromArray(
 						[
-							elm$html$Html$text('Final ability scores:')
+							elm$html$Html$text('Ability scores:')
 						])),
-					author$project$Main$viewStatArray(arr),
+					A4(author$project$Main$viewStatTable, arr, firstSwappedAbility, secondSwappedAbility, modifiers),
 					A2(
 					elm$html$Html$button,
 					_List_fromArray(
@@ -5854,10 +6292,9 @@ var elm$core$String$left = F2(
 		return (n < 1) ? '' : A3(elm$core$String$slice, 0, n, string);
 	});
 var elm$core$String$contains = _String_contains;
-var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {U: fragment, V: host, _: path, ab: port_, ae: protocol, af: query};
+		return {X: fragment, Y: host, ab: path, ad: port_, ag: protocol, ah: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {

@@ -1,5 +1,11 @@
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -7,13 +13,14 @@ body {
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+    padding: 1em;
 }
 
 .point-spread {
     margin: 0.8em;
     padding: 0.2em;
     cursor: pointer;
-    width: calc(6*1.8em);
+    width: calc(0.4em + 6*1.8em);
 }
 .point-spread:hover {
     background-color: turquoise;
@@ -22,12 +29,39 @@ body {
 .score {
     display: inline-block;
     width: 1.8em;
-}
-.stat-label {
-    display: inline-block;
-    width: 4em;
+    text-align: center;
 }
 
-.labeled-score {
-    margin: 1em;
+table.stat-report {
+    margin: 0.8em;
+    border-collapse: collapse;
+}
+
+input[type=number] {
+    width: 3em;
+}
+
+td, th {
+    padding: 0.2em;
+    text-align: center;
+}
+thead {
+    border-bottom: solid 1px rgba(0,0,0,0.3);
+}
+
+/* column styles */
+.ability-col {
+    width: 3em;
+}
+.score-col {
+    width: 2em;
+}
+.swap-col {
+    width: 3.5em;
+    border-left: solid 1px rgba(0,0,0,0.3);
+}
+.manual-mod-col {
+    width: 3em;
+    border-left: solid 1px rgba(0,0,0,0.3);
+    border-right: solid 1px rgba(0,0,0,0.3);
 }
