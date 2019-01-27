@@ -39,6 +39,7 @@ button {
     padding: 0.8em;
     cursor: pointer;
     font-size: initial;
+    font-family: Arial, Helvetica, sans-serif;
 }
 button:hover {
     background-color: turquoise;
@@ -47,6 +48,7 @@ button:hover {
 input[type=number] {
     width: 3em;
     font-size: initial;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 table.stat-report {
