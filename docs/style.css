@@ -38,6 +38,7 @@ button {
     color: black;
     padding: 0.8em;
     cursor: pointer;
+    font-size: initial;
 }
 button:hover {
     background-color: turquoise;
@@ -45,6 +46,7 @@ button:hover {
 
 input[type=number] {
     width: 3em;
+    font-size: initial;
 }
 
 table.stat-report {
