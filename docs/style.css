@@ -85,10 +85,6 @@ footer {
     margin-top: 0.4rem;
 }
 
-.status-bar {
-    margin-block: 1em;
-}
-
 .status-bar > * + * {
     margin-left: 1rem;
 }
