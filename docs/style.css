@@ -71,12 +71,17 @@ footer {
     width: 100%;
 }
 .settings {
-    border: solid 1px #ccc;
+    border: solid 1px #ccc;  /* backup */
+    border-image: linear-gradient( to bottom, #eee 0, #ccc 3rem) 1;
     padding: 1rem;
     border-top: none;
     display: flex;
     flex-flow: row wrap;
     gap: 1em;
+}
+button:hover + .settings,
+button:focus-visible + .settings {
+    border-image: linear-gradient( to bottom, turquoise 0, #ccc 3rem) 1;
 }
 .points-settings {
     text-align: right;
