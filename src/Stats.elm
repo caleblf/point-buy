@@ -19,6 +19,18 @@ type alias ModifierArray =
   , cha : Int
   }
 
+fromList : List Int -> Maybe StatArray
+fromList values =
+  case values of
+    str::dex::con::int::wis::cha::[] ->
+      StatArray str dex con int wis cha |> Just
+    _ ->
+      Nothing
+
+toList : StatArray -> List Int
+toList { str, dex, con, int, wis, cha } =
+  [ str, dex, con, int, wis, cha ]
+
 type Ability
   = Str
   | Dex
@@ -51,18 +63,18 @@ abilitiesEqual ability1 ability2 =
     _ -> False
 
 
-setterFor : Ability -> Int -> StatArray -> StatArray
-setterFor ability =
+setAbility : Ability -> Int -> StatArray -> StatArray
+setAbility ability =
   case ability of
-    Str -> changeStrTo
-    Dex -> changeDexTo
-    Con -> changeConTo
-    Int_ -> changeIntTo
-    Wis -> changeWisTo
-    Cha -> changeChaTo
+    Str -> setStrTo
+    Dex -> setDexTo
+    Con -> setConTo
+    Int_ -> setIntTo
+    Wis -> setWisTo
+    Cha -> setChaTo
 
-getterFor : Ability -> StatArray -> Int
-getterFor ability =
+getAbility : Ability -> StatArray -> Int
+getAbility ability =
   case ability of
     Str -> .str
     Dex -> .dex
@@ -83,17 +95,6 @@ labels =
   ]
 
 
-toList : StatArray -> List Int
-toList { str, dex, con, int, wis, cha } =
-  [ str
-  , dex
-  , con
-  , int
-  , wis
-  , cha
-  ]
-
-
 zip : StatArray -> StatArray -> List (Int, Int)
 zip arr1 arr2 =
   [ (arr1.str, arr2.str)
@@ -107,9 +108,9 @@ zip arr1 arr2 =
 
 swapStatsIn : Ability -> Ability -> StatArray -> StatArray
 swapStatsIn ability1 ability2 arr =
-  setterFor ability1 (getterFor ability2 arr)
-    <| setterFor ability2 (getterFor ability1 arr)
-    <| arr
+  arr
+    |> setAbility ability1 (getAbility ability2 arr)
+    |> setAbility ability2 (getAbility ability1 arr)
 
 
 rawModifiers : ModifierArray
@@ -124,8 +125,7 @@ modifier score =
 modifierString : Int -> String
 modifierString mod =
   String.fromInt mod
-  |> if mod > 0 then String.cons '+'
-     else identity
+    |> if mod > 0 then String.cons '+' else identity
 
 
 applyModifiers : StatArray -> ModifierArray -> StatArray
@@ -139,27 +139,36 @@ applyModifiers arr1 arr2 =
     (arr1.cha + arr2.cha)
 
 
-changeStrTo : Int -> StatArray -> StatArray
-changeStrTo score arr =
+setStrTo : Int -> StatArray -> StatArray
+setStrTo score arr =
   { arr | str = score }
 
-changeDexTo : Int -> StatArray -> StatArray
-changeDexTo score arr =
+setDexTo : Int -> StatArray -> StatArray
+setDexTo score arr =
   { arr | dex = score }
 
-changeConTo : Int -> StatArray -> StatArray
-changeConTo score arr =
+setConTo : Int -> StatArray -> StatArray
+setConTo score arr =
   { arr | con = score }
 
-changeIntTo : Int -> StatArray -> StatArray
-changeIntTo score arr =
+setIntTo : Int -> StatArray -> StatArray
+setIntTo score arr =
   { arr | int = score }
 
-changeWisTo : Int -> StatArray -> StatArray
-changeWisTo score arr =
+setWisTo : Int -> StatArray -> StatArray
+setWisTo score arr =
   { arr | wis = score }
 
-changeChaTo : Int -> StatArray -> StatArray
-changeChaTo score arr =
+setChaTo : Int -> StatArray -> StatArray
+setChaTo score arr =
   { arr | cha = score }
 
+map : ( Int -> Int ) -> StatArray -> StatArray
+map mapper arr =
+  StatArray
+    (mapper arr.str)
+    (mapper arr.dex)
+    (mapper arr.con)
+    (mapper arr.int)
+    (mapper arr.wis)
+    (mapper arr.cha)

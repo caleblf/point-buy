@@ -1,12 +1,12 @@
 # point-buy
-Random D&amp;D ability score generator based on the Point Buy system.
-Uniformly generates several optimal ability score arrays.
+D&amp;D ability score calculator based on the Point Buy system.
+Uniformly generates random optimal ability score arrays.
 
 ## Web application
 Accessible at <http://Iguanotron.github.io/point-buy/>.
 
-## Console script
+## Console script (legacy)
 Requires Python 3.6 or later. For options, run:
-```
+```sh
 ./pointbuy.py --help
 ```

@@ -1,22 +1,25 @@
+module Main exposing (..)
+
 import Browser
+import Dict
 import Html exposing (Html)
 import Html.Events
 import Html.Attributes as Attr
 import Random
-import Random.List
 
 import Stats exposing (StatArray, ModifierArray, Ability)
-import Spreads exposing (PointSpread)
+import Arrays exposing (ScoreArray)
 
 
 -- MAIN
 
 
+main : Program () Model Msg
 main =
   Browser.element
     { init = init
     , update = update
-    , subscriptions = subscriptions
+    , subscriptions = always Sub.none
     , view = view
     }
 
@@ -25,15 +28,24 @@ main =
 -- MODEL
 
 
-type Model
-  = DisplayStats StatArray Ability Ability ModifierArray
-  | PickSpread (List PointSpread)
+type alias Model =
+  { arraysModel : Arrays.Model
+  , stats : StatArray
+  , firstSwapSelection : Ability
+  , secondSwapSelection : Ability
+  , modifiers : ModifierArray
+  }
 
 
 init : () -> (Model, Cmd Msg)
 init _ =
-  ( PickSpread []
-  , Random.generate ChosenOptions <| Spreads.randomSpreads 3
+  ( { arraysModel = Arrays.init
+    , stats = StatArray 8 8 8 8 8 8
+    , firstSwapSelection = Stats.Str
+    , secondSwapSelection = Stats.Str
+    , modifiers = ModifierArray 0 0 0 0 0 0
+    }
+  , Cmd.none
   )
 
 
@@ -42,151 +54,210 @@ init _ =
 
 
 type Msg
-  = ChosenOptions (List PointSpread)
-  | Scrambled PointSpread
-  | Choose PointSpread
-  | Restart
-  | ChangeFirstSwapSelectionTo Ability
-  | ChangeSecondSwapSelectionTo Ability
-  | ChangeModifier Ability Int
+  = ArraysMsg Arrays.Msg
+  | SetScore Ability Int
+  | SetModifier Ability Int
+  | SetFirstSwapSelection Ability
+  | SetSecondSwapSelection Ability
+  | RandomizeStats
+  | RandomizedScores ScoreArray
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    Restart ->
+    ArraysMsg arraysMsg ->
+      let
+        newArraysModel = Arrays.update model.arraysModel arraysMsg
+      in
+        ( { model
+          | arraysModel = newArraysModel
+          , stats =
+              Stats.map
+                ( clamp
+                  newArraysModel.scoreCosts.minimumScore
+                  newArraysModel.scoreCosts.maximumScore
+                )
+                model.stats
+          }
+        , Cmd.none
+        )
+    SetScore ability newScore ->
+      ( { model
+        | stats =
+            Stats.setAbility
+              ability
+              ( clamp
+                model.arraysModel.scoreCosts.minimumScore
+                model.arraysModel.scoreCosts.maximumScore 
+                newScore
+              )
+              model.stats
+        }
+      , Cmd.none
+      )
+    SetModifier ability newModifier ->
+      ( { model
+        | modifiers =
+            Stats.setAbility
+              ability
+              newModifier
+              model.modifiers
+        }
+      , Cmd.none
+      )
+    SetFirstSwapSelection newFirstSwapSelection ->
+      ( { model
+        | firstSwapSelection = newFirstSwapSelection
+        }
+      , Cmd.none
+      )
+    SetSecondSwapSelection newSecondSwapSelection ->
+      ( { model
+        | secondSwapSelection = newSecondSwapSelection
+        }
+      , Cmd.none
+      )
+    RandomizeStats ->
       ( model
-      , Random.generate ChosenOptions <| Spreads.randomSpreads 3
+      , Random.generate RandomizedScores
+          <| Arrays.randomArray model.arraysModel
       )
-    ChosenOptions spreads ->
-      ( PickSpread spreads
+    RandomizedScores scoreArray ->
+      ( { model
+        | stats = Stats.fromList scoreArray |> Maybe.withDefault model.stats
+        }
       , Cmd.none
       )
-    Choose spread ->
-      ( model
-      , Random.generate Scrambled <| Random.List.shuffle spread
-      )
-    Scrambled (str::dex::con::int::wis::cha::[]) ->
-      ( DisplayStats
-          (StatArray str dex con int wis cha)
-          Stats.Str Stats.Str Stats.rawModifiers
-      , Cmd.none
-      )
-    _ ->
-      ( case model of
-          DisplayStats arr firstSwappedAbility secondSwappedAbility modifiers ->
-            case msg of
-              ChangeFirstSwapSelectionTo newFirstSwapSelection ->
-                DisplayStats arr newFirstSwapSelection secondSwappedAbility modifiers
-              ChangeSecondSwapSelectionTo newSecondSwapSelection ->
-                DisplayStats arr firstSwappedAbility newSecondSwapSelection modifiers
-              ChangeModifier ability newModifier ->
-                DisplayStats arr firstSwappedAbility secondSwappedAbility
-                  <| Stats.setterFor ability newModifier modifiers
-              _ -> model -- Should never happen
-          _ -> model -- Should never happen
-      , Cmd.none
-      )
-
-
-
--- SUBSCRIPTIONS
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-  Sub.none
 
 
 
 -- VIEW
 
-
 view : Model -> Html Msg
 view model =
-  case model of
-    PickSpread spreads ->
-      Html.div []
-        [ Html.h1 [] [ Html.text "Choose one:" ]
-        , Html.div [] <| List.map spreadOption spreads
+  Html.div [ Attr.class "content-container" ]
+    [ Html.div []
+        [ viewStatus model
+        , viewStatTable model
         ]
-    DisplayStats arr firstSwappedAbility secondSwappedAbility modifiers ->
-      Html.div []
-        [ Html.h1 [] [ Html.text "Ability scores:" ]
-        , viewStatTable arr firstSwappedAbility secondSwappedAbility modifiers
-        , Html.button [ Html.Events.onClick Restart ] [ Html.text "Reselect Scores" ]
-        ]
-
-
-spreadOption : PointSpread -> Html Msg
-spreadOption spread =
-  Html.div
-    [ Attr.class "point-spread"
-    , Html.Events.onClick <| Choose spread
+    , Arrays.view model.arraysModel |> Html.map ArraysMsg
     ]
-    <| List.map
-      (\n -> Html.div [ Attr.class "score" ] [ Html.text <| String.fromInt n])
-      spread
 
 
-viewStatTable : StatArray -> Ability -> Ability -> ModifierArray -> Html Msg
-viewStatTable arr firstSwappedAbility secondSwappedAbility modifiers =
+viewStatus : Model -> Html Msg
+viewStatus model =
+  Html.div
+    [ Attr.class "status-bar" ]
+    [ Html.span []
+        [ model.stats
+            |> Stats.toList
+            |> List.map
+                (\score ->
+                  Dict.get score model.arraysModel.scoreCosts.costsByScore
+                    |> Maybe.withDefault 0
+                )
+            |> List.sum
+            |> (-) model.arraysModel.scoreCosts.totalPoints
+            |> String.fromInt
+            |> (++) "Points Left: "
+            |> Html.text
+        ]
+    , Html.button
+        ( if List.isEmpty model.arraysModel.allScoreArrays
+          then
+            [ Attr.disabled True
+            , Attr.title "Impossible to spend all points; change costs or total to use randomizer"
+            ]
+          else [ Html.Events.onClick RandomizeStats ]
+        )
+        [ Html.text "Randomize All" ]
+    ]
+
+
+viewStatTable : Model -> Html Msg
+viewStatTable { arraysModel, stats, firstSwapSelection, secondSwapSelection, modifiers } =
   Html.table [ Attr.class "stat-report" ]
     [ Html.thead []
         [ Html.tr []
-            [ Html.th [ Attr.colspan 2 ] [ columnLabel "Raw Scores" ]
-            , Html.th [ Attr.class "swap-col" ] [ columnLabel "Swap Two" ]
-            , Html.th [ Attr.class "manual-mod-col" ] [ columnLabel "Racial Modifiers" ]
-            , Html.th [ Attr.colspan 3 ] [ columnLabel "Final Scores" ]
+            [ Html.th [ Attr.colspan 2, Attr.class "colgroup-end" ] [ Html.text "Raw Scores" ]
+            , Html.th [ Attr.colspan 2, Attr.class "colgroup-start colgroup-end" ]
+                [ Html.text "Swap"
+                , Html.br [] []
+                , Html.text "Two"
+                ]
+            , Html.th [ Attr.class "colgroup-start colgroup-end" ] [ Html.text "Bonuses" ]
+            , Html.th [ Attr.colspan 3, Attr.class "colgroup-start" ] [ Html.text "Final Scores" ]
             ]
         ]
     , Html.tbody []
-        <| List.map5 (statTableRow firstSwappedAbility secondSwappedAbility)
-          Stats.abilities
-          Stats.labels
-          (Stats.toList arr)
-          (Stats.toList modifiers)
-          (Stats.toList
-            <| Stats.applyModifiers
-              (Stats.swapStatsIn firstSwappedAbility secondSwappedAbility arr)
-              modifiers)
+        <| List.map5
+            ( statTableRow
+              ( scoreSelector
+                arraysModel.scoreCosts.minimumScore
+                arraysModel.scoreCosts.maximumScore
+              )
+              firstSwapSelection
+              secondSwapSelection
+            )
+            Stats.abilities
+            Stats.labels
+            (Stats.toList stats)
+            (Stats.toList modifiers)
+            (Stats.toList
+              <| Stats.applyModifiers
+                (Stats.swapStatsIn firstSwapSelection secondSwapSelection stats)
+                modifiers)
     ]
 
 
-statTableRow : Ability -> Ability -> Ability -> String -> Int -> Int -> Int -> Html Msg
-statTableRow firstSwappedAbility secondSwappedAbility ability label rawScore racialModifier finalScore =
+statTableRow :
+  ( Ability -> Int -> Html Msg )
+  -> Ability -> Ability -> Ability -> String -> Int -> Int -> Int -> Html Msg
+statTableRow
+  scoreSelectorBuilder
+  firstSwappedAbility
+  secondSwappedAbility
+  ability
+  label
+  rawScore
+  modifier
+  finalScore =
   Html.tr []
     <| List.map2 (\class -> Html.td [class])
       columnClasses
       [ [ Html.text label ]
-      , [ Html.text <| String.fromInt rawScore ]
+      , [ scoreSelectorBuilder ability rawScore ]
       , [ Html.input
             [ Attr.type_ "radio"
             , Attr.name "swap-first"
-            , Html.Events.onClick <| ChangeFirstSwapSelectionTo ability
+            , Html.Events.onClick <| SetFirstSwapSelection ability
             , Attr.checked <| Stats.abilitiesEqual ability firstSwappedAbility
             ]
             []
-        , Html.input
+        ]
+      , [ Html.input
             [ Attr.type_ "radio"
             , Attr.name "swap-second"
-            , Html.Events.onClick <| ChangeSecondSwapSelectionTo ability
+            , Html.Events.onClick <| SetSecondSwapSelection ability
             , Attr.checked <| Stats.abilitiesEqual ability secondSwappedAbility
             ]
             []
         ]
       , [ Html.text "+"
         , Html.input
-            ((if racialModifier > 0
-              then (::) <| Attr.value <| String.fromInt racialModifier
-              else identity)
+            ( ( if modifier > 0
+                then String.fromInt modifier |> Attr.value |> (::)
+                else identity
+              )
               [ Attr.type_ "number"
               , Attr.min "0"
               , Attr.max "2"
               , Html.Events.onInput
-                <| String.toInt >> Maybe.withDefault 0 >> ChangeModifier ability
+                <| String.toInt >> Maybe.withDefault 0 >> SetModifier ability
               , Attr.placeholder "0"
-              ])
+              ]
+            )
             []
         ]
       , [ Html.text label ]
@@ -194,20 +265,28 @@ statTableRow firstSwappedAbility secondSwappedAbility ability label rawScore rac
       , [ Html.text <| "(" ++ (Stats.modifierString <| Stats.modifier finalScore) ++ ")" ]
       ]
 
-
-columnLabel : String -> Html msg
-columnLabel label =
-  Html.div [ Attr.class "column-label" ] [ Html.text label ]
-
+scoreSelector : Int -> Int -> Ability -> Int -> Html Msg
+scoreSelector minimumScore maximumScore ability score =
+  Html.input
+    [ Attr.value <| String.fromInt score
+    , Attr.type_ "number"
+    , Attr.min <| String.fromInt minimumScore
+    , Attr.max <| String.fromInt maximumScore
+    , Html.Events.onInput
+        <| String.toInt >> Maybe.withDefault 0 >> SetScore ability
+    , Attr.placeholder "0"
+    ]
+    []
 
 columnClasses : List (Html.Attribute msg)
 columnClasses =
   List.map Attr.class
-    [ "ability-col"
-    , "score-col"
-    , "swap-col"
-    , "manual-mod-col"
-    , "ability-col"
-    , "score-col"
-    , "score-col"
+    [ ""
+    , "colgroup-end"
+    , "colgroup-start swap-col"
+    , "colgroup-end swap-col"
+    , "colgroup-start colgroup-end"
+    , "colgroup-start"
+    , ""
+    , ""
     ]
