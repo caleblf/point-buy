@@ -84,6 +84,12 @@ footer {
 .points-settings > * + * {
     margin-top: 0.4rem;
 }
+.points-settings > label {
+    display: block;
+}
+.points-settings > label > input {
+    margin-left: 0.4rem;
+}
 
 .status-bar > * + * {
     margin-left: 1rem;

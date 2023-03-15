@@ -221,7 +221,7 @@ settings scoreCosts =
 
 totalPointsSelector : Int -> Html Msg
 totalPointsSelector totalPoints =
-  Html.div []
+  Html.label []
     [ Html.text "Total Points:"
     , Html.input
         [ Attr.value <| String.fromInt totalPoints
@@ -235,7 +235,7 @@ totalPointsSelector totalPoints =
 
 limitSelector : String -> ( Int -> Msg ) -> Int -> Html Msg
 limitSelector label msg limit =
-  Html.div []
+  Html.label []
     [ Html.text label
     , Html.input
         [ Attr.value <| String.fromInt limit

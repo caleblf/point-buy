@@ -6144,6 +6144,7 @@ var $elm$core$Basics$composeR = F3(
 			f(x));
 	});
 var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$label = _VirtualDom_node('label');
 var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
 var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
 var $elm$html$Html$Events$alwaysStop = function (x) {
@@ -6186,7 +6187,7 @@ var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('
 var $author$project$Arrays$limitSelector = F3(
 	function (label, msg, limit) {
 		return A2(
-			$elm$html$Html$div,
+			$elm$html$Html$label,
 			_List_Nil,
 			_List_fromArray(
 				[
@@ -6330,7 +6331,7 @@ var $author$project$Arrays$SetTotalPoints = function (a) {
 };
 var $author$project$Arrays$totalPointsSelector = function (totalPoints) {
 	return A2(
-		$elm$html$Html$div,
+		$elm$html$Html$label,
 		_List_Nil,
 		_List_fromArray(
 			[
