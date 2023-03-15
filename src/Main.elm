@@ -31,6 +31,7 @@ main =
 type alias Model =
   { arraysModel : Arrays.Model
   , stats : StatArray
+  , configuringStat : Maybe ( Ability, String )
   , firstSwapSelection : Ability
   , secondSwapSelection : Ability
   , modifiers : ModifierArray
@@ -41,6 +42,7 @@ init : () -> (Model, Cmd Msg)
 init _ =
   ( { arraysModel = Arrays.init
     , stats = StatArray 8 8 8 8 8 8
+    , configuringStat = Nothing
     , firstSwapSelection = Stats.Str
     , secondSwapSelection = Stats.Str
     , modifiers = ModifierArray 0 0 0 0 0 0
@@ -61,6 +63,7 @@ type Msg
   | SetSecondSwapSelection Ability
   | RandomizeStats
   | RandomizedScores ScoreArray
+  | Configuring Ability String
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -79,6 +82,7 @@ update msg model =
                   newArraysModel.scoreCosts.maximumScore
                 )
                 model.stats
+          , configuringStat = Nothing
           }
         , Cmd.none
         )
@@ -93,6 +97,7 @@ update msg model =
                 newScore
               )
               model.stats
+        , configuringStat = Nothing
         }
       , Cmd.none
       )
@@ -103,32 +108,43 @@ update msg model =
               ability
               newModifier
               model.modifiers
+        , configuringStat = Nothing
         }
       , Cmd.none
       )
     SetFirstSwapSelection newFirstSwapSelection ->
       ( { model
         | firstSwapSelection = newFirstSwapSelection
+        , configuringStat = Nothing
         }
       , Cmd.none
       )
     SetSecondSwapSelection newSecondSwapSelection ->
       ( { model
         | secondSwapSelection = newSecondSwapSelection
+        , configuringStat = Nothing
         }
       , Cmd.none
       )
     RandomizeStats ->
-      ( model
+      ( { model
+        | configuringStat = Nothing
+        }
       , Random.generate RandomizedScores
           <| Arrays.randomArray model.arraysModel
       )
     RandomizedScores scoreArray ->
       ( { model
         | stats = Stats.fromList scoreArray |> Maybe.withDefault model.stats
+        , configuringStat = Nothing
         }
       , Cmd.none
       )
+    Configuring ability text ->
+      ( { model
+        | configuringStat = Just ( ability, text )
+        }
+      , Cmd.none )
 
 
 
@@ -176,7 +192,7 @@ viewStatus model =
 
 
 viewStatTable : Model -> Html Msg
-viewStatTable { arraysModel, stats, firstSwapSelection, secondSwapSelection, modifiers } =
+viewStatTable { arraysModel, stats, configuringStat, firstSwapSelection, secondSwapSelection, modifiers } =
   Html.table [ Attr.class "stat-report" ]
     [ Html.thead []
         [ Html.tr []
@@ -196,6 +212,7 @@ viewStatTable { arraysModel, stats, firstSwapSelection, secondSwapSelection, mod
               ( scoreSelector
                 arraysModel.scoreCosts.minimumScore
                 arraysModel.scoreCosts.maximumScore
+                configuringStat
               )
               firstSwapSelection
               secondSwapSelection
@@ -212,7 +229,7 @@ viewStatTable { arraysModel, stats, firstSwapSelection, secondSwapSelection, mod
 
 
 statTableRow :
-  ( Ability -> Int -> Html Msg )
+  ( String -> Ability -> Int -> Html Msg )
   -> Ability -> Ability -> Ability -> String -> Int -> Int -> Int -> Html Msg
 statTableRow
   scoreSelectorBuilder
@@ -224,10 +241,10 @@ statTableRow
   modifier
   finalScore =
   Html.tr []
-    <| List.map2 (\class -> Html.td [class])
+    <| List.map2 (\class -> Html.td [ class ])
       columnClasses
-      [ [ Html.text label ]
-      , [ scoreSelectorBuilder ability rawScore ]
+      [ [ Html.label [ Attr.for label ] [ Html.text label ] ]
+      , [ scoreSelectorBuilder label ability rawScore ]
       , [ Html.input
             [ Attr.type_ "radio"
             , Attr.name "swap-first"
@@ -265,17 +282,32 @@ statTableRow
       , [ Html.text <| "(" ++ (Stats.modifierString <| Stats.modifier finalScore) ++ ")" ]
       ]
 
-scoreSelector : Int -> Int -> Ability -> Int -> Html Msg
-scoreSelector minimumScore maximumScore ability score =
+scoreSelector : Int -> Int -> Maybe ( Ability, String ) -> String -> Ability -> Int -> Html Msg
+scoreSelector minimumScore maximumScore configuringStat id ability score =
   Html.input
-    [ Attr.value <| String.fromInt score
-    , Attr.type_ "number"
-    , Attr.min <| String.fromInt minimumScore
-    , Attr.max <| String.fromInt maximumScore
-    , Html.Events.onInput
-        <| String.toInt >> Maybe.withDefault 0 >> SetScore ability
-    , Attr.placeholder "0"
-    ]
+    ( [ Attr.value
+          <|
+            if configuringStat == Just ( ability, "" )
+            then ""
+            else if configuringStat == Just ( ability, "1" )
+            then "1"
+            else String.fromInt score
+      , Attr.type_ "number"
+      , Attr.min <| String.fromInt minimumScore
+      , Attr.max <| String.fromInt maximumScore
+      , Html.Events.onInput
+          (\value ->
+            if value == "1" || value == ""
+            then Configuring ability value -- assume user is starting to type a longer number
+            else
+              value
+                |> String.toInt
+                |> Maybe.withDefault minimumScore
+                |> SetScore ability
+          )
+      , Attr.id id
+      ]
+    )
     []
 
 columnClasses : List (Html.Attribute msg)

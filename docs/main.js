@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region._.M === region.ae.M)
+	if (region.aa.N === region.af.N)
 	{
-		return 'on line ' + region._.M;
+		return 'on line ' + region.aa.N;
 	}
-	return 'on lines ' + region._.M + ' through ' + region.ae.M;
+	return 'on lines ' + region.aa.N + ' through ' + region.af.N;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aL,
-		impl.aT,
-		impl.aR,
+		impl.aM,
+		impl.aU,
+		impl.aS,
 		function() { return function() {} }
 	);
 });
@@ -2719,9 +2719,9 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		w: func(record.w),
-		aa: record.aa,
-		Y: record.Y
+		x: func(record.x),
+		ab: record.ab,
+		Z: record.Z
 	}
 });
 
@@ -2989,11 +2989,11 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.w;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aa;
+		var message = !tag ? value : tag < 3 ? value.a : value.x;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.ab;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.Y) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.Z) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3943,11 +3943,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aL,
-		impl.aT,
-		impl.aR,
+		impl.aM,
+		impl.aU,
+		impl.aS,
 		function(sendToApp, initialModel) {
-			var view = impl.aU;
+			var view = impl.aV;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3979,12 +3979,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aL,
-		impl.aT,
-		impl.aR,
+		impl.aM,
+		impl.aU,
+		impl.aS,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.Z && impl.Z(sendToApp)
-			var view = impl.aU;
+			var divertHrefToApp = impl._ && impl._(sendToApp)
+			var view = impl.aV;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3992,12 +3992,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aE);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aF);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aS) && (_VirtualDom_doc.title = title = doc.aS);
+				(title !== doc.aT) && (_VirtualDom_doc.title = title = doc.aT);
 			});
 		}
 	);
@@ -4053,12 +4053,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aN;
-	var onUrlRequest = impl.aO;
+	var onUrlChange = impl.aO;
+	var onUrlRequest = impl.aP;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		Z: function(sendToApp)
+		_: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ar === next.ar
-							&& curr.ai === next.ai
-							&& curr.ao.a === next.ao.a
+							&& curr.as === next.as
+							&& curr.aj === next.aj
+							&& curr.ap.a === next.ap.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,13 +4084,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aL: function(flags)
+		aM: function(flags)
 		{
-			return A3(impl.aL, flags, _Browser_getUrl(), key);
+			return A3(impl.aM, flags, _Browser_getUrl(), key);
 		},
+		aV: impl.aV,
 		aU: impl.aU,
-		aT: impl.aT,
-		aR: impl.aR
+		aS: impl.aS
 	});
 }
 
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aJ: 'hidden', aF: 'visibilitychange' }
+		? { aK: 'hidden', aG: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aJ: 'mozHidden', aF: 'mozvisibilitychange' }
+		? { aK: 'mozHidden', aG: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aJ: 'msHidden', aF: 'msvisibilitychange' }
+		? { aK: 'msHidden', aG: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aJ: 'webkitHidden', aF: 'webkitvisibilitychange' }
-		: { aJ: 'hidden', aF: 'visibilitychange' };
+		? { aK: 'webkitHidden', aG: 'webkitvisibilitychange' }
+		: { aK: 'hidden', aG: 'visibilitychange' };
 }
 
 
@@ -4247,12 +4247,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		av: _Browser_getScene(),
-		ay: {
-			aA: _Browser_window.pageXOffset,
-			aB: _Browser_window.pageYOffset,
-			az: _Browser_doc.documentElement.clientWidth,
-			ah: _Browser_doc.documentElement.clientHeight
+		aw: _Browser_getScene(),
+		az: {
+			aB: _Browser_window.pageXOffset,
+			aC: _Browser_window.pageYOffset,
+			aA: _Browser_doc.documentElement.clientWidth,
+			ai: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4262,8 +4262,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		az: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		ah: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		aA: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		ai: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4286,15 +4286,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			av: {
-				az: node.scrollWidth,
-				ah: node.scrollHeight
+			aw: {
+				aA: node.scrollWidth,
+				ai: node.scrollHeight
 			},
-			ay: {
-				aA: node.scrollLeft,
-				aB: node.scrollTop,
-				az: node.clientWidth,
-				ah: node.clientHeight
+			az: {
+				aB: node.scrollLeft,
+				aC: node.scrollTop,
+				aA: node.clientWidth,
+				ai: node.clientHeight
 			}
 		};
 	});
@@ -4324,18 +4324,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			av: _Browser_getScene(),
-			ay: {
-				aA: x,
-				aB: y,
-				az: _Browser_doc.documentElement.clientWidth,
-				ah: _Browser_doc.documentElement.clientHeight
+			aw: _Browser_getScene(),
+			az: {
+				aB: x,
+				aC: y,
+				aA: _Browser_doc.documentElement.clientWidth,
+				ai: _Browser_doc.documentElement.clientHeight
 			},
-			aH: {
-				aA: x + rect.left,
-				aB: y + rect.top,
-				az: rect.width,
-				ah: rect.height
+			aI: {
+				aB: x + rect.left,
+				aC: y + rect.top,
+				aA: rect.width,
+				ai: rect.height
 			}
 		};
 	});
@@ -4961,7 +4961,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {ag: fragment, ai: host, am: path, ao: port_, ar: protocol, as: query};
+		return {ah: fragment, aj: host, an: path, ap: port_, as: protocol, at: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5242,11 +5242,11 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$element = _Browser_element;
 var $author$project$Stats$ModifierArray = F6(
 	function (str, dex, con, _int, wis, cha) {
-		return {k: cha, l: con, m: dex, n: _int, r: str, s: wis};
+		return {l: cha, m: con, n: dex, o: _int, s: str, t: wis};
 	});
 var $author$project$Stats$StatArray = F6(
 	function (str, dex, con, _int, wis, cha) {
-		return {k: cha, l: con, m: dex, n: _int, r: str, s: wis};
+		return {l: cha, m: con, n: dex, o: _int, s: str, t: wis};
 	});
 var $author$project$Stats$Str = 0;
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
@@ -5392,7 +5392,7 @@ var $author$project$Arrays$defaultCostsByScore = $elm$core$Dict$fromList(
 			_Utils_Tuple2(17, 15),
 			_Utils_Tuple2(18, 19)
 		]));
-var $author$project$Arrays$defaultScoreCosts = {E: $author$project$Arrays$defaultCostsByScore, G: 15, A: 8, Q: 27};
+var $author$project$Arrays$defaultScoreCosts = {F: $author$project$Arrays$defaultCostsByScore, H: 15, B: 8, R: 27};
 var $elm$core$List$append = F2(
 	function (xs, ys) {
 		if (!ys.b) {
@@ -5518,10 +5518,10 @@ var $elm$core$Maybe$withDefault = F2(
 		}
 	});
 var $author$project$Arrays$optimalScoreArrays = function (_v0) {
-	var minimumScore = _v0.A;
-	var maximumScore = _v0.G;
-	var totalPoints = _v0.Q;
-	var costsByScore = _v0.E;
+	var minimumScore = _v0.B;
+	var maximumScore = _v0.H;
+	var totalPoints = _v0.R;
+	var costsByScore = _v0.F;
 	var bestScoresAndCosts = A3(
 		$elm$core$List$foldr,
 		F2(
@@ -5599,9 +5599,9 @@ var $author$project$Arrays$optimalScoreArrays = function (_v0) {
 			A3($elm$core$List$foldr, $elm$core$Basics$max, 0, adjustedCosts)));
 };
 var $author$project$Arrays$init = {
-	T: $author$project$Arrays$optimalScoreArrays($author$project$Arrays$defaultScoreCosts),
-	H: $author$project$Arrays$defaultScoreCosts,
-	I: false
+	U: $author$project$Arrays$optimalScoreArrays($author$project$Arrays$defaultScoreCosts),
+	I: $author$project$Arrays$defaultScoreCosts,
+	J: false
 };
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
@@ -5609,10 +5609,11 @@ var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
 		{
 			g: $author$project$Arrays$init,
-			U: 0,
-			N: A6($author$project$Stats$ModifierArray, 0, 0, 0, 0, 0, 0),
+			j: $elm$core$Maybe$Nothing,
 			V: 0,
-			q: A6($author$project$Stats$StatArray, 8, 8, 8, 8, 8, 8)
+			O: A6($author$project$Stats$ModifierArray, 0, 0, 0, 0, 0, 0),
+			W: 0,
+			r: A6($author$project$Stats$StatArray, 8, 8, 8, 8, 8, 8)
 		},
 		$elm$core$Platform$Cmd$none);
 };
@@ -5746,12 +5747,12 @@ var $author$project$Stats$map = F2(
 	function (mapper, arr) {
 		return A6(
 			$author$project$Stats$StatArray,
-			mapper(arr.r),
-			mapper(arr.m),
-			mapper(arr.l),
-			mapper(arr.n),
 			mapper(arr.s),
-			mapper(arr.k));
+			mapper(arr.n),
+			mapper(arr.m),
+			mapper(arr.o),
+			mapper(arr.t),
+			mapper(arr.l));
 	});
 var $elm$random$Random$andThen = F2(
 	function (callback, _v0) {
@@ -5905,52 +5906,52 @@ var $elm_community$random_extra$Random$List$shuffle = function (list) {
 		$elm$random$Random$independentSeed);
 };
 var $author$project$Arrays$randomArray = function (_v0) {
-	var scoreCosts = _v0.H;
-	var allScoreArrays = _v0.T;
+	var scoreCosts = _v0.I;
+	var allScoreArrays = _v0.U;
 	return A2(
 		$elm$random$Random$andThen,
 		$elm_community$random_extra$Random$List$shuffle,
 		A2(
 			$elm$random$Random$map,
 			$elm$core$Maybe$withDefault(
-				A2($elm$core$List$repeat, 6, scoreCosts.A)),
+				A2($elm$core$List$repeat, 6, scoreCosts.B)),
 			$elm_community$random_extra$Random$Extra$sample(allScoreArrays)));
 };
 var $author$project$Stats$setChaTo = F2(
 	function (score, arr) {
 		return _Utils_update(
 			arr,
-			{k: score});
+			{l: score});
 	});
 var $author$project$Stats$setConTo = F2(
 	function (score, arr) {
 		return _Utils_update(
 			arr,
-			{l: score});
+			{m: score});
 	});
 var $author$project$Stats$setDexTo = F2(
 	function (score, arr) {
 		return _Utils_update(
 			arr,
-			{m: score});
+			{n: score});
 	});
 var $author$project$Stats$setIntTo = F2(
 	function (score, arr) {
 		return _Utils_update(
 			arr,
-			{n: score});
+			{o: score});
 	});
 var $author$project$Stats$setStrTo = F2(
 	function (score, arr) {
 		return _Utils_update(
 			arr,
-			{r: score});
+			{s: score});
 	});
 var $author$project$Stats$setWisTo = F2(
 	function (score, arr) {
 		return _Utils_update(
 			arr,
-			{s: score});
+			{t: score});
 	});
 var $author$project$Stats$setAbility = function (ability) {
 	switch (ability) {
@@ -5973,12 +5974,12 @@ var $author$project$Arrays$leastSupportedScore = 6;
 var $elm$core$Basics$not = _Basics_not;
 var $author$project$Arrays$update = F2(
 	function (model, msg) {
-		var scoreCosts = model.H;
-		var settingsShown = model.I;
+		var scoreCosts = model.I;
+		var settingsShown = model.J;
 		if (msg.$ === 4) {
 			return _Utils_update(
 				model,
-				{I: !settingsShown});
+				{J: !settingsShown});
 		} else {
 			var newScoreCosts = function () {
 				switch (msg.$) {
@@ -5987,21 +5988,21 @@ var $author$project$Arrays$update = F2(
 						return _Utils_update(
 							scoreCosts,
 							{
-								Q: A2($elm$core$Basics$max, newTotalPoints, 0)
+								R: A2($elm$core$Basics$max, newTotalPoints, 0)
 							});
 					case 1:
 						var newMinimumScore = msg.a;
 						return _Utils_update(
 							scoreCosts,
 							{
-								A: A3($elm$core$Basics$clamp, $author$project$Arrays$leastSupportedScore, $author$project$Arrays$greatestSupportedScore, newMinimumScore)
+								B: A3($elm$core$Basics$clamp, $author$project$Arrays$leastSupportedScore, $author$project$Arrays$greatestSupportedScore, newMinimumScore)
 							});
 					case 2:
 						var newMaximumScore = msg.a;
 						return _Utils_update(
 							scoreCosts,
 							{
-								G: A3($elm$core$Basics$clamp, $author$project$Arrays$leastSupportedScore, $author$project$Arrays$greatestSupportedScore, newMaximumScore)
+								H: A3($elm$core$Basics$clamp, $author$project$Arrays$leastSupportedScore, $author$project$Arrays$greatestSupportedScore, newMaximumScore)
 							});
 					case 3:
 						var score = msg.a;
@@ -6009,16 +6010,16 @@ var $author$project$Arrays$update = F2(
 						return _Utils_update(
 							scoreCosts,
 							{
-								E: A3($elm$core$Dict$insert, score, newCost, scoreCosts.E)
+								F: A3($elm$core$Dict$insert, score, newCost, scoreCosts.F)
 							});
 					default:
 						return scoreCosts;
 				}
 			}();
 			return {
-				T: $author$project$Arrays$optimalScoreArrays(newScoreCosts),
-				H: newScoreCosts,
-				I: true
+				U: $author$project$Arrays$optimalScoreArrays(newScoreCosts),
+				I: newScoreCosts,
+				J: true
 			};
 		}
 	});
@@ -6033,10 +6034,11 @@ var $author$project$Main$update = F2(
 						model,
 						{
 							g: newArraysModel,
-							q: A2(
+							j: $elm$core$Maybe$Nothing,
+							r: A2(
 								$author$project$Stats$map,
-								A2($elm$core$Basics$clamp, newArraysModel.H.A, newArraysModel.H.G),
-								model.q)
+								A2($elm$core$Basics$clamp, newArraysModel.I.B, newArraysModel.I.H),
+								model.r)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 1:
@@ -6046,11 +6048,12 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							q: A3(
+							j: $elm$core$Maybe$Nothing,
+							r: A3(
 								$author$project$Stats$setAbility,
 								ability,
-								A3($elm$core$Basics$clamp, model.g.H.A, model.g.H.G, newScore),
-								model.q)
+								A3($elm$core$Basics$clamp, model.g.I.B, model.g.I.H, newScore),
+								model.r)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 2:
@@ -6060,7 +6063,8 @@ var $author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							N: A3($author$project$Stats$setAbility, ability, newModifier, model.N)
+							j: $elm$core$Maybe$Nothing,
+							O: A3($author$project$Stats$setAbility, ability, newModifier, model.O)
 						}),
 					$elm$core$Platform$Cmd$none);
 			case 3:
@@ -6068,32 +6072,46 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{U: newFirstSwapSelection}),
+						{j: $elm$core$Maybe$Nothing, V: newFirstSwapSelection}),
 					$elm$core$Platform$Cmd$none);
 			case 4:
 				var newSecondSwapSelection = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{V: newSecondSwapSelection}),
+						{j: $elm$core$Maybe$Nothing, W: newSecondSwapSelection}),
 					$elm$core$Platform$Cmd$none);
 			case 5:
 				return _Utils_Tuple2(
-					model,
+					_Utils_update(
+						model,
+						{j: $elm$core$Maybe$Nothing}),
 					A2(
 						$elm$random$Random$generate,
 						$author$project$Main$RandomizedScores,
 						$author$project$Arrays$randomArray(model.g)));
-			default:
+			case 6:
 				var scoreArray = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							q: A2(
+							j: $elm$core$Maybe$Nothing,
+							r: A2(
 								$elm$core$Maybe$withDefault,
-								model.q,
+								model.r,
 								$author$project$Stats$fromList(scoreArray))
+						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var ability = msg.a;
+				var text = msg.b;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							j: $elm$core$Maybe$Just(
+								_Utils_Tuple2(ability, text))
 						}),
 					$elm$core$Platform$Cmd$none);
 		}
@@ -6246,9 +6264,9 @@ var $elm$html$Html$th = _VirtualDom_node('th');
 var $elm$html$Html$thead = _VirtualDom_node('thead');
 var $elm$html$Html$tr = _VirtualDom_node('tr');
 var $author$project$Arrays$scoreCostsSelector = function (_v0) {
-	var minimumScore = _v0.A;
-	var maximumScore = _v0.G;
-	var costsByScore = _v0.E;
+	var minimumScore = _v0.B;
+	var maximumScore = _v0.H;
+	var costsByScore = _v0.F;
 	return A2(
 		$elm$html$Html$table,
 		_List_fromArray(
@@ -6373,16 +6391,16 @@ var $author$project$Arrays$settings = function (scoreCosts) {
 					]),
 				_List_fromArray(
 					[
-						$author$project$Arrays$totalPointsSelector(scoreCosts.Q),
-						A3($author$project$Arrays$limitSelector, 'Minimum Score:', $author$project$Arrays$SetMinimumScore, scoreCosts.A),
-						A3($author$project$Arrays$limitSelector, 'Maximum Score:', $author$project$Arrays$SetMaximumScore, scoreCosts.G)
+						$author$project$Arrays$totalPointsSelector(scoreCosts.R),
+						A3($author$project$Arrays$limitSelector, 'Minimum Score:', $author$project$Arrays$SetMinimumScore, scoreCosts.B),
+						A3($author$project$Arrays$limitSelector, 'Maximum Score:', $author$project$Arrays$SetMaximumScore, scoreCosts.H)
 					])),
 				$author$project$Arrays$scoreCostsSelector(scoreCosts)
 			]));
 };
 var $author$project$Arrays$view = function (_v0) {
-	var scoreCosts = _v0.H;
-	var settingsShown = _v0.I;
+	var scoreCosts = _v0.I;
+	var settingsShown = _v0.J;
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -6416,7 +6434,7 @@ var $author$project$Stats$abilities = _List_fromArray(
 	[0, 1, 2, 3, 4, 5]);
 var $author$project$Stats$applyModifiers = F2(
 	function (arr1, arr2) {
-		return A6($author$project$Stats$StatArray, arr1.r + arr2.r, arr1.m + arr2.m, arr1.l + arr2.l, arr1.n + arr2.n, arr1.s + arr2.s, arr1.k + arr2.k);
+		return A6($author$project$Stats$StatArray, arr1.s + arr2.s, arr1.n + arr2.n, arr1.m + arr2.m, arr1.o + arr2.o, arr1.t + arr2.t, arr1.l + arr2.l);
 	});
 var $elm$html$Html$br = _VirtualDom_node('br');
 var $elm$html$Html$Attributes$colspan = function (n) {
@@ -6428,33 +6446,45 @@ var $elm$html$Html$Attributes$colspan = function (n) {
 var $author$project$Stats$labels = _List_fromArray(
 	['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
 var $elm$core$List$map5 = _List_map5;
+var $author$project$Main$Configuring = F2(
+	function (a, b) {
+		return {$: 7, a: a, b: b};
+	});
 var $author$project$Main$SetScore = F2(
 	function (a, b) {
 		return {$: 1, a: a, b: b};
 	});
-var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
-var $author$project$Main$scoreSelector = F4(
-	function (minimumScore, maximumScore, ability, score) {
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
+var $author$project$Main$scoreSelector = F6(
+	function (minimumScore, maximumScore, configuringStat, id, ability, score) {
 		return A2(
 			$elm$html$Html$input,
 			_List_fromArray(
 				[
 					$elm$html$Html$Attributes$value(
-					$elm$core$String$fromInt(score)),
+					_Utils_eq(
+						configuringStat,
+						$elm$core$Maybe$Just(
+							_Utils_Tuple2(ability, ''))) ? '' : (_Utils_eq(
+						configuringStat,
+						$elm$core$Maybe$Just(
+							_Utils_Tuple2(ability, '1'))) ? '1' : $elm$core$String$fromInt(score))),
 					$elm$html$Html$Attributes$type_('number'),
 					$elm$html$Html$Attributes$min(
 					$elm$core$String$fromInt(minimumScore)),
 					$elm$html$Html$Attributes$max(
 					$elm$core$String$fromInt(maximumScore)),
 					$elm$html$Html$Events$onInput(
-					A2(
-						$elm$core$Basics$composeR,
-						$elm$core$String$toInt,
-						A2(
-							$elm$core$Basics$composeR,
-							$elm$core$Maybe$withDefault(0),
-							$author$project$Main$SetScore(ability)))),
-					$elm$html$Html$Attributes$placeholder('0')
+					function (value) {
+						return ((value === '1') || (value === '')) ? A2($author$project$Main$Configuring, ability, value) : A2(
+							$author$project$Main$SetScore,
+							ability,
+							A2(
+								$elm$core$Maybe$withDefault,
+								minimumScore,
+								$elm$core$String$toInt(value)));
+					}),
+					$elm$html$Html$Attributes$id(id)
 				]),
 			_List_Nil);
 	});
@@ -6540,6 +6570,7 @@ var $author$project$Main$columnClasses = A2(
 	$elm$html$Html$Attributes$class,
 	_List_fromArray(
 		['', 'colgroup-end', 'colgroup-start swap-col', 'colgroup-end swap-col', 'colgroup-start colgroup-end', 'colgroup-start', '', '']));
+var $elm$html$Html$Attributes$for = $elm$html$Html$Attributes$stringProperty('htmlFor');
 var $author$project$Stats$modifier = function (score) {
 	return ((score / 2) | 0) - 5;
 };
@@ -6549,6 +6580,7 @@ var $author$project$Stats$modifierString = function (mod) {
 		$elm$core$String$fromInt(mod));
 };
 var $elm$html$Html$Attributes$name = $elm$html$Html$Attributes$stringProperty('name');
+var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
 var $author$project$Main$statTableRow = F8(
 	function (scoreSelectorBuilder, firstSwappedAbility, secondSwappedAbility, ability, label, rawScore, modifier, finalScore) {
 		return A2(
@@ -6566,11 +6598,20 @@ var $author$project$Main$statTableRow = F8(
 					[
 						_List_fromArray(
 						[
-							$elm$html$Html$text(label)
+							A2(
+							$elm$html$Html$label,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$for(label)
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text(label)
+								]))
 						]),
 						_List_fromArray(
 						[
-							A2(scoreSelectorBuilder, ability, rawScore)
+							A3(scoreSelectorBuilder, label, ability, rawScore)
 						]),
 						_List_fromArray(
 						[
@@ -6648,27 +6689,27 @@ var $author$project$Stats$getAbility = function (ability) {
 	switch (ability) {
 		case 0:
 			return function ($) {
-				return $.r;
+				return $.s;
 			};
 		case 1:
 			return function ($) {
-				return $.m;
+				return $.n;
 			};
 		case 2:
 			return function ($) {
-				return $.l;
+				return $.m;
 			};
 		case 3:
 			return function ($) {
-				return $.n;
+				return $.o;
 			};
 		case 4:
 			return function ($) {
-				return $.s;
+				return $.t;
 			};
 		default:
 			return function ($) {
-				return $.k;
+				return $.l;
 			};
 	}
 };
@@ -6685,21 +6726,22 @@ var $author$project$Stats$swapStatsIn = F3(
 				arr));
 	});
 var $author$project$Stats$toList = function (_v0) {
-	var str = _v0.r;
-	var dex = _v0.m;
-	var con = _v0.l;
-	var _int = _v0.n;
-	var wis = _v0.s;
-	var cha = _v0.k;
+	var str = _v0.s;
+	var dex = _v0.n;
+	var con = _v0.m;
+	var _int = _v0.o;
+	var wis = _v0.t;
+	var cha = _v0.l;
 	return _List_fromArray(
 		[str, dex, con, _int, wis, cha]);
 };
 var $author$project$Main$viewStatTable = function (_v0) {
 	var arraysModel = _v0.g;
-	var stats = _v0.q;
-	var firstSwapSelection = _v0.U;
-	var secondSwapSelection = _v0.V;
-	var modifiers = _v0.N;
+	var stats = _v0.r;
+	var configuringStat = _v0.j;
+	var firstSwapSelection = _v0.V;
+	var secondSwapSelection = _v0.W;
+	var modifiers = _v0.O;
 	return A2(
 		$elm$html$Html$table,
 		_List_fromArray(
@@ -6772,7 +6814,7 @@ var $author$project$Main$viewStatTable = function (_v0) {
 					$elm$core$List$map5,
 					A3(
 						$author$project$Main$statTableRow,
-						A2($author$project$Main$scoreSelector, arraysModel.H.A, arraysModel.H.G),
+						A3($author$project$Main$scoreSelector, arraysModel.I.B, arraysModel.I.H, configuringStat),
 						firstSwapSelection,
 						secondSwapSelection),
 					$author$project$Stats$abilities,
@@ -6816,20 +6858,20 @@ var $author$project$Main$viewStatus = function (model) {
 					[
 						$elm$html$Html$text(
 						'Points Left: ' + $elm$core$String$fromInt(
-							model.g.H.Q - $elm$core$List$sum(
+							model.g.I.R - $elm$core$List$sum(
 								A2(
 									$elm$core$List$map,
 									function (score) {
 										return A2(
 											$elm$core$Maybe$withDefault,
 											0,
-											A2($elm$core$Dict$get, score, model.g.H.E));
+											A2($elm$core$Dict$get, score, model.g.I.F));
 									},
-									$author$project$Stats$toList(model.q)))))
+									$author$project$Stats$toList(model.r)))))
 					])),
 				A2(
 				$elm$html$Html$button,
-				$elm$core$List$isEmpty(model.g.T) ? _List_fromArray(
+				$elm$core$List$isEmpty(model.g.U) ? _List_fromArray(
 					[
 						$elm$html$Html$Attributes$disabled(true),
 						$elm$html$Html$Attributes$title('Impossible to spend all points; change costs or total to use randomizer')
@@ -6868,10 +6910,10 @@ var $author$project$Main$view = function (model) {
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
 	{
-		aL: $author$project$Main$init,
-		aR: $elm$core$Basics$always($elm$core$Platform$Sub$none),
-		aT: $author$project$Main$update,
-		aU: $author$project$Main$view
+		aM: $author$project$Main$init,
+		aS: $elm$core$Basics$always($elm$core$Platform$Sub$none),
+		aU: $author$project$Main$update,
+		aV: $author$project$Main$view
 	});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
